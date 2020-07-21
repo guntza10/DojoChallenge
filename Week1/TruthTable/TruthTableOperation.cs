@@ -6,7 +6,7 @@ namespace TruthTable
 {
     public class TruthTableOperation
     {
-        public bool Result { get; private set; }
+        public string Result { get; private set; }
 
         public TruthTableOperation(string operation, List<string> inputs)
         {
@@ -21,30 +21,30 @@ namespace TruthTable
             Result = result;
         }
 
-        private bool AND(List<string> inputs)
+        private string AND(List<string> inputs)
         {
             var checkFalse = inputs.Select(it => it.ToUpper()).Any(it => it == "F");
-            var result = checkFalse ? false : true;
+            var result = checkFalse ? "F" : "T";
             return result;
         }
 
-        private bool OR(List<string> inputs)
+        private string OR(List<string> inputs)
         {
             var checkTrue = inputs.Select(it => it.ToUpper()).Any(it => it == "T");
-            var result = checkTrue ? true : false;
+            var result = checkTrue ? "T" : "F";
             return result;
         }
 
-        private bool XOR(List<string> inputs)
+        private string XOR(List<string> inputs)
         {
             var listInput = inputs.Select(it => it.ToUpper());
             var keeper = listInput.Skip(0).Take(1).FirstOrDefault();
-            var listInp = listInput.Skip(1);
-            foreach (var input in listInp)
+            var listInputUseForeach = listInput.Skip(1);
+            foreach (var input in listInputUseForeach)
             {
                 keeper = IsXOR(keeper, input) ? "T" : "F";
             }
-            return (keeper == "T") ? true : false;
+            return (keeper == "T") ? "T" : "F";
         }
 
         private bool IsXOR(string input1, string input2)
