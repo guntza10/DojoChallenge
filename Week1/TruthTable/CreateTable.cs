@@ -6,7 +6,7 @@ namespace TruthTable
 {
     public class CreateTable
     {
-        public void CreateTruthTable(int amountInput, string operation)
+        public void CreateTruthTable(int amountInput)
         {
             var inputsPossible = new List<string>
             {
@@ -14,55 +14,57 @@ namespace TruthTable
                 "F"
             };
 
-            var listInput = new List<List<string>>();
-            inputsPossible.ForEach(it =>
-            {
-                for (int i = 0; i <= amountInput; i++)
-                {
-                    if (i == 0)
-                    {
-                        var listsameInput = new List<string>();
-                        var sameInput = Enumerable.Repeat(it, amountInput).ToList();
-                        sameInput.ForEach(inp =>
-                        {
-                            listsameInput.Add(inp);
-                        });
-                        listInput.Add(listsameInput);
-                    }
-                    else
-                    {
-                        var listInputPossible = new List<string>();
-                        var repeatInput = Enumerable.Repeat(it, amountInput).ToList();
-                        repeatInput.ForEach(inp =>
-                        {
-                            listInputPossible.Add(inp);
-                        });
-                    }
+            // 3
+            var generateInput = Enumerable.Repeat(inputsPossible, amountInput).ToList();
+            var totalInput = new List<List<string>>();
 
-                }
-            });
-        }
-
-        public List<string> Rearrange(List<string> list, int amount)
-        {
-            var listKeeper = list;
-            var keeper = listKeeper[0];
-            for (int i = 0; i < amount - 1; i++)
+            for (int i = 0; i < 2; i++)
             {
-                for (int j = 0; j < amount; j++)
+                var input1 = generateInput[0][i];
+                for (int j = 0; j < 2; j++)
                 {
-                    listKeeper[j] = (j == amount - 1) ? list[i] : list[j + 1];
+                    var input2 = generateInput[1][j];
+                    for (int k = 0; k < 2; k++)
+                    {
+                        var input3 = generateInput[2][k];
+                        var final = new List<string>
+                        {
+                            input1,
+                            input2,
+                            input3
+                        };
+
+                        totalInput.Add(final);
+                    }
                 }
             }
-            return new List<string>();
+
+            //2
+            var totalInput2 = new List<List<string>>();
+            var g2 = Enumerable.Repeat(inputsPossible, 2).ToList();
+            for (int i = 0; i < 2; i++)
+            {
+                var input1 = g2[0][i];
+                for (int j = 0; j < 2; j++)
+                {
+                    var input2 = g2[1][j];
+                    var final = new List<string>
+                        {
+                            input1,
+                            input2
+                        };
+                    totalInput2.Add(final);
+                }
+            }
+        }
+
+        public void GenerateTable(List<List<string>> inputPossible,int amountInput)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                var input = inputPossible[amountInput][];
+            }
         }
     }
 
 }
-
-//  0
-//                     var input2 = inputsPossible[j];
-//                     listInput.Add(input2);
-//                     var truthTableOp = new TruthTableOperation(operation, listInput);
-//                     var result = truthTableOp.Result;
-//                     Console.WriteLine($"{input1}\t{input2}\t=>\t{result}");
