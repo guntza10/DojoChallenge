@@ -28,10 +28,14 @@ namespace GeneratorPassword
             var lowerCase = lowerGenerate(amountLower);
             var numberCase = numberGenerate(amountNumber);
 
+            var sb = new StringBuilder();
+            var passwordGenerateDone = sb.Append(upperCase).Append(lowerCase).Append(numberCase).ToString();
+            var shufflePass = shuffleString(passwordGenerateDone);
+
             Console.WriteLine($"upperCase : {upperCase}");
             Console.WriteLine($"lowerCase : {lowerCase}");
             Console.WriteLine($"numberCase : {numberCase}");
-
+            Console.WriteLine($"password : {shufflePass}");
         }
 
         private List<int> generateRatioPassword()
@@ -54,19 +58,30 @@ namespace GeneratorPassword
             return new List<int> { amountUpper, amountLower, amountNumber };
         }
 
+        private string shuffleString(string str)
+        {
+            var strKeep = new StringBuilder(str);
+            var strShuffle = new StringBuilder(str);
+            for (int i = 0; i < str.Length; i++)
+            {
+                var index = randomFunction(0, strKeep.Length);
+                strShuffle[i] = strKeep[index];
+                strKeep.Remove(index, 1);
+            }
+            return strShuffle.ToString();
+        }
+
         private string upperGenerate(int amount)
         {
             var sb = new StringBuilder();
             var upperKeep = upperLetters;
-            var totalLetter = 26;
 
             for (int i = 0; i < amount; i++)
             {
-                var index = randomFunction(0, totalLetter);
+                var index = randomFunction(0, upperKeep.Length);
                 var upperRandom = upperKeep[index].ToString();
                 sb.Append(upperRandom);
-                upperKeep.Remove(index, 1);
-                totalLetter--;
+                upperKeep = upperKeep.Remove(index, 1);
             }
             return sb.ToString();
         }
@@ -75,15 +90,13 @@ namespace GeneratorPassword
         {
             var sb = new StringBuilder();
             var lowerKeep = lowerLetters;
-            var totalLetter = 26;
 
             for (int i = 0; i < amount; i++)
             {
-                var index = randomFunction(0, totalLetter);
+                var index = randomFunction(0, lowerKeep.Length);
                 var lowerRandom = lowerKeep[index].ToString();
                 sb.Append(lowerRandom);
-                lowerKeep.Remove(index, 1);
-                totalLetter--;
+                lowerKeep = lowerKeep.Remove(index, 1);
             }
             return sb.ToString();
         }
@@ -105,6 +118,5 @@ namespace GeneratorPassword
             var rnd = new Random();
             return rnd.Next(min, max);
         }
-
     }
 }
