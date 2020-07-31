@@ -19,7 +19,20 @@ namespace GeneratorPassword
 
         public void GeneratePassword()
         {
-            var ratioPassword = generateRatioPassword();
+            var randomCase = randomFunction(1, 4);
+            var password = randomCase switch
+            {
+                1 => case1(),
+                2 => case2(),
+                3 => case3(),
+                _ => "can't be generated."
+            };
+            Console.WriteLine($"password : {password}");
+        }
+
+        private string case1()
+        {
+            var ratioPassword = generateRatioPassword(1, 1, 1);
             var amountUpper = ratioPassword[0];
             var amountLower = ratioPassword[1];
             var amountNumber = ratioPassword[2];
@@ -32,27 +45,80 @@ namespace GeneratorPassword
             var passwordGenerateDone = sb.Append(upperCase).Append(lowerCase).Append(numberCase).ToString();
             var shufflePass = shuffleString(passwordGenerateDone);
 
+            Console.WriteLine($"Case 1");
             Console.WriteLine($"upperCase : {upperCase}");
             Console.WriteLine($"lowerCase : {lowerCase}");
             Console.WriteLine($"numberCase : {numberCase}");
-            Console.WriteLine($"password : {shufflePass}");
+            return shufflePass;
         }
 
-        private List<int> generateRatioPassword()
+        private string case2()
         {
-            var amountUpper = 0;
-            var amountLower = 0;
-            var amountNumber = 0;
+            var ratioPassword = generateRatioPassword(1, 0, 1);
+            var amountUpper = ratioPassword[0];
+            var amountNumber = ratioPassword[2];
+
+            var upperCase = upperGenerate(amountUpper);
+            var numberCase = numberGenerate(amountNumber);
+
+            var sb = new StringBuilder();
+            var passwordGenerateDone = sb.Append(upperCase).Append(numberCase).ToString();
+            var shufflePass = shuffleString(passwordGenerateDone);
+
+            Console.WriteLine($"Case 2");
+            Console.WriteLine($"upperCase : {upperCase}");
+            Console.WriteLine($"numberCase : {numberCase}");
+            return shufflePass;
+        }
+
+        private string case3()
+        {
+            var ratioPassword = generateRatioPassword(0, 1, 1);
+            var amountLower = ratioPassword[1];
+            var amountNumber = ratioPassword[2];
+
+            var lowerCase = lowerGenerate(amountLower);
+            var numberCase = numberGenerate(amountNumber);
+
+            var sb = new StringBuilder();
+            var passwordGenerateDone = sb.Append(lowerCase).Append(numberCase).ToString();
+            var shufflePass = shuffleString(passwordGenerateDone);
+
+            Console.WriteLine($"Case 3");
+            Console.WriteLine($"lowerCase : {lowerCase}");
+            Console.WriteLine($"numberCase : {numberCase}");
+            return shufflePass;
+        }
+
+        private List<int> generateRatioPassword(int upper, int lower, int number)
+        {
+            var amountUpper = upper;
+            var amountLower = lower;
+            var amountNumber = number;
+
+            var amountPassword = 8;
+            var maxUpper = 3;
+            var maxLower = 3;
+            var maxNumber = 5;
+
+            var caseGeneratRatio = (upper != 0 && lower != 0) ? 1 : 2;
+
             var IsRatio = false;
             while (IsRatio == false)
             {
-                var amountPassword = 8;
-                var maxNumber = 5;
+                if (caseGeneratRatio == 1)
+                {
+                    amountUpper = randomFunction(1, maxUpper + 1);
+                    amountLower = randomFunction(1, maxLower + 1);
+                }
+                else
+                {
+                    amountUpper = (upper != 0) ? randomFunction(1, maxUpper + 1) : 0;
+                    amountLower = (lower != 0) ? randomFunction(1, maxLower + 1) : 0;
+                    maxNumber = 6;
+                }
 
-                amountUpper = randomFunction(1, 4);
-                amountLower = randomFunction(1, 4);
                 amountNumber = amountPassword - (amountUpper + amountLower);
-
                 if (amountNumber <= maxNumber) IsRatio = true;
             }
             return new List<int> { amountUpper, amountLower, amountNumber };
